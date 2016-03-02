@@ -73,7 +73,6 @@ public class BuildingStoreyCheckServicePlugin extends ServicePlugin
 		buildingStoreyCheck.setNotificationProtocol(AccessMethod.INTERNAL);
 		buildingStoreyCheck.setReadRevision(true);
 		buildingStoreyCheck.setWriteExtendedData(NAMESPACE); 
-		
 		buildingStoreyCheck.setTrigger(Trigger.NEW_REVISION);
 		
 		registerNewRevisionHandler(uoid, buildingStoreyCheck, new NewRevisionHandler() {
