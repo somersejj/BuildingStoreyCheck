@@ -1,2 +1,0 @@
-mvn install:install-file -DcreateChecksum=true -Dpackaging=jar -Dfile=lib/bimserver-1.4.0-FINAL-2015-05-14-shared.jar -DgroupId=bimserver -Dartifact
-Id=bimserver-1.4.0-FINAL-2015-05-14-shared -Dversion=1.0.0 -DgeneratePom=true

@@ -1,10 +1,11 @@
-package org.bimserver.BuildingStorey;
+package org.bimserver.buildingstorey;
  
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.io.Charsets;
 import org.bimserver.emf.IdEObject;
 import org.bimserver.emf.IfcModelInterface;
 import org.bimserver.interfaces.objects.SActionState;
@@ -23,33 +24,32 @@ import org.bimserver.models.ifc2x3tc1.IfcObjectPlacement;
 import org.bimserver.models.ifc2x3tc1.IfcProduct;
 import org.bimserver.models.ifc2x3tc1.IfcRelContainedInSpatialStructure;
 import org.bimserver.models.ifc2x3tc1.IfcRelDecomposes;
-import org.bimserver.models.ifc2x3tc1.IfcRelVoidsElement;
 import org.bimserver.models.ifc2x3tc1.IfcSpatialStructureElement;
 import org.bimserver.models.ifc2x3tc1.impl.IfcDistributionFlowElementImpl;
 import org.bimserver.models.ifc2x3tc1.impl.IfcFlowTerminalImpl;
 import org.bimserver.models.ifc2x3tc1.impl.IfcFurnishingElementImpl;
 import org.bimserver.models.ifc2x3tc1.impl.IfcOpeningElementImpl;
 import org.bimserver.models.ifc2x3tc1.impl.IfcVirtualElementImpl;
+import org.bimserver.models.ifc4.IfcRelVoidsElement;
 import org.bimserver.models.log.AccessMethod;
 import org.bimserver.models.store.ObjectDefinition;
 import org.bimserver.models.store.ServiceDescriptor;
 import org.bimserver.models.store.StoreFactory;
 import org.bimserver.models.store.Trigger;
 import org.bimserver.plugins.PluginConfiguration;
-import org.bimserver.plugins.PluginException;
-import org.bimserver.plugins.PluginManager;
-import org.bimserver.plugins.services.BimServerClientException;
+import org.bimserver.plugins.PluginManagerInterface;
 import org.bimserver.plugins.services.BimServerClientInterface;
 import org.bimserver.plugins.services.NewRevisionHandler;
 import org.bimserver.plugins.services.ServicePlugin;
-import org.bimserver.shared.PublicInterfaceNotFoundException;
+import org.bimserver.shared.exceptions.BimServerClientException;
+import org.bimserver.shared.exceptions.PluginException;
+import org.bimserver.shared.exceptions.PublicInterfaceNotFoundException;
 import org.bimserver.shared.exceptions.ServerException;
 import org.bimserver.shared.exceptions.UserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.BiMap;
-import com.google.common.base.Charsets;
 
 public class BuildingStoreyCheckServicePlugin extends ServicePlugin
 {
@@ -57,13 +57,15 @@ public class BuildingStoreyCheckServicePlugin extends ServicePlugin
 	private static final Logger LOGGER = LoggerFactory.getLogger(BuildingStoreyCheckServicePlugin.class);
 	private boolean initialized;
 	private static final String NAMESPACE = "http://bimserver.org/buildingStoreyCheck";
+	
 	@Override
-	public void init(final PluginManager pluginManager) throws PluginException {
+	public void init(PluginManagerInterface pluginManager) throws PluginException {
 		super.init(pluginManager);
 		initialized = true;
 	}
 
-	public void register(long uoid, SInternalServicePluginConfiguration internalServicePluginConfiguration, final PluginConfiguration pluginConfiguration) 
+	@Override
+	public void register(long uoid, SInternalServicePluginConfiguration internalServicePluginConfiguration, PluginConfiguration pluginConfiguration) 
 	{
 		ServiceDescriptor buildingStoreyCheck = StoreFactory.eINSTANCE.createServiceDescriptor();
 		buildingStoreyCheck.setProviderName("BIMserver");
@@ -171,7 +173,7 @@ public class BuildingStoreyCheckServicePlugin extends ServicePlugin
 							if (product instanceof IfcOpeningElementImpl)
 							{
 								LOGGER.debug("----- opening product");
-								IfcRelVoidsElement ifcRelVoidsElement =  ((IfcOpeningElementImpl)product).getVoidsElements();
+								IfcRelVoidsElement ifcRelVoidsElement =  (IfcRelVoidsElement) ((IfcOpeningElementImpl)product).getVoidsElements();
 								{
 									if (floorRelatedProducts.contains(ifcRelVoidsElement.getRelatingBuildingElement()))
 									{
