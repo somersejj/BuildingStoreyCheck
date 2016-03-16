@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginDescriptor>
-	<PluginImplementation>
+	<JavaPlugin>
 		<interfaceClass>org.bimserver.plugins.services.ServicePlugin</interfaceClass>
-		<implementationClass>org.bimserver.BuildingStory.BuildingStoreyCheckServicePlugin</implementationClass>
-		<enabled>true</enabled>
-	</PluginImplementation>
+		<implementationClass>org.bimserver.buildingstorey.BuildingStoreyCheckServicePlugin</implementationClass>
+		<description>BuildingStorey check plugin</description>
+	</JavaPlugin>
 </PluginDescriptor>
